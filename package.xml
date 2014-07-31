@@ -40,16 +40,12 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>baxter_action_msgs</build_depend>
-  <build_depend>baxter_action_server</build_depend>
-  <build_depend>baxter_core_msgs</build_depend>
-  <build_depend>ros_robocook</build_depend>
   <run_depend>baxter_action_msgs</run_depend>
   <run_depend>baxter_action_server</run_depend>
   <run_depend>baxter_core_msgs</run_depend>
   <run_depend>ros_robocook</run_depend>
-  <run_depend>object_identifier</run_depend>
-
+  <run_depend>object_identifier</run_depen>
+d
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
