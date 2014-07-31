@@ -48,6 +48,7 @@
   <run_depend>baxter_action_server</run_depend>
   <run_depend>baxter_core_msgs</run_depend>
   <run_depend>ros_robocook</run_depend>
+  <run_depend>object_identifier</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
