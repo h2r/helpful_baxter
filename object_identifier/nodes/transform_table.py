@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import roslib
 roslib.load_manifest("object_identifier")
 import rospy
