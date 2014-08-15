@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.github.rosjava.baxter_action_msgs</groupId>
+  <artifactId>baxter_core_msgs</artifactId>
+  <version>1.0.0</version>
+  <versioning>
+    <versions>
+      <version>1.0.0</version>
+    </versions>
+    <lastUpdated>20140815172424</lastUpdated>
+  </versioning>
+</metadata>

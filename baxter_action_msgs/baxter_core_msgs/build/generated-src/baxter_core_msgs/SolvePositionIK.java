@@ -1,0 +1,6 @@
+package baxter_core_msgs;
+
+public interface SolvePositionIK extends org.ros.internal.message.Message {
+  static final java.lang.String _TYPE = "baxter_core_msgs/SolvePositionIK";
+  static final java.lang.String _DEFINITION = "# Endpoint Pose(s) to request Inverse-Kinematics joint solutions for.\ngeometry_msgs/PoseStamped[] pose_stamp\n\n# (optional) Joint Angle Seed(s) for IK solver.\n# * specify a JointState seed for each pose_stamp, using name[] and position[]\n# * empty arrays or a non-default seed_mode will cause user seed to not be used\nsensor_msgs/JointState[] seed_angles\n\n# Seed Type Mode\n# * default (SEED_AUTO) mode: iterate through seed types until first valid\n#                             solution is found\n# * setting any other mode:   try only that seed type\nuint8 SEED_AUTO    = 0\nuint8 SEED_USER    = 1\nuint8 SEED_CURRENT = 2\nuint8 SEED_NS_MAP  = 3\n\nuint8 seed_mode\n---\n# joints[i]      == joint angle solution for each pose_state[i]\nsensor_msgs/JointState[] joints\n\n# NOTE: isValid will be deprecated by result_type in future versions\nbool[] isValid\n\n# result_type[i] == seed type used to find valid solution, joints[i];\n# otherwise,     == RESULT_INVALID (no valid solution found).\nuint8 RESULT_INVALID = 0\nuint8[] result_type\n";
+}

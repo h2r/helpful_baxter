@@ -1,0 +1,45 @@
+package baxter_core_msgs;
+
+public interface EndEffectorState extends org.ros.internal.message.Message {
+  static final java.lang.String _TYPE = "baxter_core_msgs/EndEffectorState";
+  static final java.lang.String _DEFINITION = "#\ntime timestamp              # time when state was updated\nuint32 id                   # EndEffectorId\n#\n# The following State fields are tristate: 0 = false; 1 = true; 2 = unknown/unsupported\n  uint8   STATE_FALSE = 0\n  uint8   STATE_TRUE = 1\n  uint8   STATE_UNKNOWN = 2\n#\nuint8   enabled             # true if enabled\nuint8   calibrated          # true if calibration has completed\nuint8   ready               # true if ready for another command\nuint8   moving              # true if moving\nuint8   gripping            # true if gripping\nuint8   missed              # true if GRIP/GOTO/SET was commanded and the gripper reaches the end of travel\nuint8   error               # true if the gripper is in an error state\nuint8   reverse             # true if the gripper is in reverse mode\n#\nfloat32 position            # position as a percentage of the max position;      0=closed - 100=open\n#\n  float32 POSITION_CLOSED = 0.0\n  float32 POSITION_OPEN   = 100.0\n#\nfloat32 force               # force as a percentage of max force;                0=none   - 100=max\n#\n  float32 FORCE_MIN = 0.0\n  float32 FORCE_MAX = 100.0\n#\nstring state                # JSON: other state information\n#\nstring command              # from the last command message\nstring command_sender\nuint32 command_sequence\n#\n";
+  static final byte STATE_FALSE = 0;
+  static final byte STATE_TRUE = 1;
+  static final byte STATE_UNKNOWN = 2;
+  static final float POSITION_CLOSED = 0.0f;
+  static final float POSITION_OPEN = 100.0f;
+  static final float FORCE_MIN = 0.0f;
+  static final float FORCE_MAX = 100.0f;
+  org.ros.message.Time getTimestamp();
+  void setTimestamp(org.ros.message.Time value);
+  int getId();
+  void setId(int value);
+  byte getEnabled();
+  void setEnabled(byte value);
+  byte getCalibrated();
+  void setCalibrated(byte value);
+  byte getReady();
+  void setReady(byte value);
+  byte getMoving();
+  void setMoving(byte value);
+  byte getGripping();
+  void setGripping(byte value);
+  byte getMissed();
+  void setMissed(byte value);
+  byte getError();
+  void setError(byte value);
+  byte getReverse();
+  void setReverse(byte value);
+  float getPosition();
+  void setPosition(float value);
+  float getForce();
+  void setForce(float value);
+  java.lang.String getState();
+  void setState(java.lang.String value);
+  java.lang.String getCommand();
+  void setCommand(java.lang.String value);
+  java.lang.String getCommandSender();
+  void setCommandSender(java.lang.String value);
+  int getCommandSequence();
+  void setCommandSequence(int value);
+}

@@ -1,0 +1,42 @@
+package baxter_core_msgs;
+
+public interface EndEffectorProperties extends org.ros.internal.message.Message {
+  static final java.lang.String _TYPE = "baxter_core_msgs/EndEffectorProperties";
+  static final java.lang.String _DEFINITION = "uint32 id               # EndEffectorId\nuint8  ui_type\n    # End Effector type enumeration, for the UI:\n    uint8  NO_GRIPPER = 0\n    uint8  SUCTION_CUP_GRIPPER = 1\n    uint8  ELECTRIC_GRIPPER = 2\n    uint8  CUSTOM_GRIPPER = 3\nstring manufacturer     # Manufacturer name\nstring product          # Product name\nstring serial_number    # Serial number, optional\nstring hardware_rev     # Hardware revision, optional\nstring firmware_rev     # Firmware revision, optional\nstring firmware_date    # Firmware date, optional\n#\n# End Effector Capabilities\nbool   controls_grip    # true if the gripper has grip/release control\nbool   senses_grip      # true if the gripper has grip sense\nbool   reverses_grip    # true if the gripper has reverse-grip mode\n\nbool   controls_force   # true if the gripper has force control\nbool   senses_force     # true if the gripper has force sense\n\nbool   controls_position # true if the gripper has position control\nbool   senses_position   # true if the gripper has position sense\n#\nstring properties       # JSON; other properties";
+  static final byte NO_GRIPPER = 0;
+  static final byte SUCTION_CUP_GRIPPER = 1;
+  static final byte ELECTRIC_GRIPPER = 2;
+  static final byte CUSTOM_GRIPPER = 3;
+  int getId();
+  void setId(int value);
+  byte getUiType();
+  void setUiType(byte value);
+  java.lang.String getManufacturer();
+  void setManufacturer(java.lang.String value);
+  java.lang.String getProduct();
+  void setProduct(java.lang.String value);
+  java.lang.String getSerialNumber();
+  void setSerialNumber(java.lang.String value);
+  java.lang.String getHardwareRev();
+  void setHardwareRev(java.lang.String value);
+  java.lang.String getFirmwareRev();
+  void setFirmwareRev(java.lang.String value);
+  java.lang.String getFirmwareDate();
+  void setFirmwareDate(java.lang.String value);
+  boolean getControlsGrip();
+  void setControlsGrip(boolean value);
+  boolean getSensesGrip();
+  void setSensesGrip(boolean value);
+  boolean getReversesGrip();
+  void setReversesGrip(boolean value);
+  boolean getControlsForce();
+  void setControlsForce(boolean value);
+  boolean getSensesForce();
+  void setSensesForce(boolean value);
+  boolean getControlsPosition();
+  void setControlsPosition(boolean value);
+  boolean getSensesPosition();
+  void setSensesPosition(boolean value);
+  java.lang.String getProperties();
+  void setProperties(java.lang.String value);
+}

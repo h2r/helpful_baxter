@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Export-Package: baxter_core_msgs;version="1.0.0";uses:="geometry_msgs,
+ org.jboss.netty.buffer,org.ros.internal.message,org.ros.message,senso
+ r_msgs,std_msgs"
+Bundle-Version: 1.0.0
+Tool: Bnd-2.1.0.20130426-122213
+Bundle-Name: baxter_core_msgs
+Bnd-LastModified: 1408120955000
+Created-By: 1.7.0_51 (Oracle Corporation)
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.github.rosjava.baxter_action_msgs.baxter_core
+ _msgs
+Import-Package: geometry_msgs;version="[1.10,2)",org.jboss.netty.buffe
+ r;version="[3.5,4)",org.ros.internal.message,org.ros.message,sensor_m
+ sgs;version="[1.10,2)",std_msgs;version="[0.5,1)"
+
