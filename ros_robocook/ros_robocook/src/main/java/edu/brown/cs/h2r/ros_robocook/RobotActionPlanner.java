@@ -68,7 +68,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
      //kitchen.setDebug(true);
      this.setInitializedFalse();
      this.actionPublisher = connectedNode.newPublisher("/baxter_action", BaxterAction._TYPE);
-     Subscriber<RecognizedObjectArray> subscriber = connectedNode.newSubscriber("/chatter", RecognizedObjectArray._TYPE);
+     Subscriber<RecognizedObjectArray> subscriber = connectedNode.newSubscriber("/ar_objects", RecognizedObjectArray._TYPE);
 
 
     subscriber.addMessageListener(new MessageListener<RecognizedObjectArray>() {
