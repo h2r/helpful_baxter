@@ -134,7 +134,7 @@ public class StateMessageGenerator extends AbstractNodeMain {
         }
 
         message.setObjects(objects);
-        publisher.publish(message);
+        //publisher.publish(message);
       }
 
       @Override

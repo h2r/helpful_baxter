@@ -46,6 +46,15 @@ import move_msgs.BaxterAction;
 import java.util.*;
 
 
+
+/*
+ * 1). Subscribe to recognized objects (done)
+ * 2). Update state accordingly (Done)
+ * 3). Plan action from new state (Update plan method)
+ * 4). Publish action (Done)
+ */
+
+
 /**
  * A simple {@link Subscriber} {@link NodeMain}.
  */
@@ -98,6 +107,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
           double y = obj.getPose().getPose().getPose().getPosition().getY();
           double z = obj.getPose().getPose().getPose().getPosition().getZ();
           // add object
+          System.out.println("Adding object " + name);
           kitchen.addObject(name, x, y, z);
          }
 
@@ -105,9 +115,9 @@ public class RobotActionPlanner extends AbstractNodeMain {
          if (!state.equals(RobotActionPlanner.this.currentState))
          {
             RobotActionPlanner.this.currentState = state;
-            kitchen.plan();
+            //kitchen.plan();
             String[] actionParams = kitchen.getRobotActionParams();
-            BaxterAction actionMsg = RobotActionPlanner.this.getRobotAction(actionParams);
+            BaxterAction actionMsg = RobotActionPlanner.this.getRobotActionMsg(actionParams);
             RobotActionPlanner.this.actionPublisher.publish(actionMsg);
          }
 
@@ -120,7 +130,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
     });
   }
 
-  public BaxterAction getRobotAction(String[] actionParams)
+  public BaxterAction getRobotActionMsg(String[] actionParams)
   {
     String action = actionParams[0];
     BaxterAction actionMsg = this.messageFactory.newFromType(BaxterAction._TYPE);
