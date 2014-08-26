@@ -63,7 +63,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
   private State currentState;
   MessageFactory messageFactory;
   Publisher<BaxterAction> actionPublisher;
-
+  List<String> previouslySeenObjects;
   @Override
   public GraphName getDefaultNodeName() {
     return GraphName.of("rosjava/listener");
@@ -78,11 +78,14 @@ public class RobotActionPlanner extends AbstractNodeMain {
      this.setInitializedFalse();
      this.actionPublisher = connectedNode.newPublisher("/baxter_action", BaxterAction._TYPE);
      Subscriber<RecognizedObjectArray> subscriber = connectedNode.newSubscriber("/ar_objects", RecognizedObjectArray._TYPE);
-
+     this.previouslySeenObjects = new ArrayList<String>();
+     
 
     subscriber.addMessageListener(new MessageListener<RecognizedObjectArray>() {
       @Override
       public void onNewMessage(RecognizedObjectArray array) {
+    	 List<String> currentObjects = new ArrayList<String>();
+    	 
        /*// Maps object ID to real object name
        final AbstractMap<String, String> object_map = new HashMap<String, String>();
 
@@ -98,9 +101,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
           System.out.println("ORK recognized no objects, planning not possible!");
           return;
        }*/
-       if (!RobotActionPlanner.this.getInitialized()) {
-         System.out.println("\nINITIALIZING STATE");
-         for (final RecognizedObject obj : array.getObjects()) {
+       for (final RecognizedObject obj : array.getObjects()) {
           final String id = obj.getType().getKey();
           final String name = id;
           double x = obj.getPose().getPose().getPose().getPosition().getX();
@@ -109,22 +110,20 @@ public class RobotActionPlanner extends AbstractNodeMain {
           // add object
           System.out.println("Adding object " + name);
           kitchen.addObject(name, x, y, z);
+          currentObjects.add(name);
          }
+       State state = kitchen.getCurrentState();
 
-         State state = kitchen.getCurrentState();
-         if (!state.equals(RobotActionPlanner.this.currentState))
-         {
-            RobotActionPlanner.this.currentState = state;
-            //kitchen.plan();
-            String[] actionParams = kitchen.getRobotActionParams();
-            BaxterAction actionMsg = RobotActionPlanner.this.getRobotActionMsg(actionParams);
-            RobotActionPlanner.this.actionPublisher.publish(actionMsg);
-         }
+       RobotActionPlanner.this.previouslySeenObjects.removeAll(currentObjects);
+       for (String name : previouslySeenObjects) {
+    	   kitchen.disposeObject(state, name);
+       }
+       RobotActionPlanner.this.currentState = state;
+       
 
-         RobotActionPlanner.this.setInitialized();
-
-         System.out.println(state.toString());
-      }
+       String[] actionParams = kitchen.getRobotActionParams();
+       BaxterAction actionMsg = RobotActionPlanner.this.getRobotActionMsg(actionParams);
+       RobotActionPlanner.this.actionPublisher.publish(actionMsg);
      }
 
     });
@@ -139,9 +138,9 @@ public class RobotActionPlanner extends AbstractNodeMain {
       actionMsg.setType(BaxterAction.MOVE);
       MoveAction moveMsg = this.messageFactory.newFromType(MoveAction._TYPE);
 
-      MoveRegion regionMsg = this.getMoveRegion(actionParams[2]);
+      MoveRegion regionMsg = this.getMoveRegion(actionParams[3]);
       MoveObject objectMsg = this.messageFactory.newFromType(MoveObject._TYPE);
-      objectMsg.setName(actionParams[1]);
+      objectMsg.setName(actionParams[2]);
       moveMsg.setObject(objectMsg);
       moveMsg.setRegion(regionMsg);
       actionMsg.setMoveAction(moveMsg);
