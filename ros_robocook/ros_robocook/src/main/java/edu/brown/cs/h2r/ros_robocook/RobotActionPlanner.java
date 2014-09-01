@@ -16,34 +16,32 @@
 
 package edu.brown.cs.h2r.ros_robocook;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import move_msgs.BaxterAction;
+import move_msgs.MoveAction;
+import move_msgs.MoveObject;
+import move_msgs.MoveRegion;
+import object_recognition_msgs.RecognizedObject;
+import object_recognition_msgs.RecognizedObjectArray;
+
 import org.apache.commons.logging.Log;
-import org.ros.internal.message.DefaultMessageFactory;
 import org.ros.message.MessageFactory;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMain;
-import org.ros.node.service.ServiceClient;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 
-
-import object_recognition_msgs.*;
-import object_recognition_msgs.GetObjectInformation.*;
-
-import geometry_msgs.Vector3;
+import burlap.behavior.singleagent.Policy;
+import burlap.oomdp.core.State;
+import edu.brown.cs.h2r.baking.Experiments.BaxterKitchen;
+import edu.brown.cs.h2r.baking.Recipes.Brownies;
 import geometry_msgs.Point;
-
-import edu.brown.cs.h2r.baking.KitchenDomain;
-import burlap.oomdp.core.*;
-
-import move_msgs.MoveAction;
-import move_msgs.MoveRegion;
-import move_msgs.MoveObject;
-import move_msgs.BaxterAction;
-
-import java.util.*;
+import geometry_msgs.Vector3;
 
 
 
@@ -64,6 +62,7 @@ public class RobotActionPlanner extends AbstractNodeMain {
   MessageFactory messageFactory;
   Publisher<BaxterAction> actionPublisher;
   List<String> previouslySeenObjects;
+  List<Policy> policies;
   @Override
   public GraphName getDefaultNodeName() {
     return GraphName.of("rosjava/listener");
@@ -72,14 +71,15 @@ public class RobotActionPlanner extends AbstractNodeMain {
   @Override
   public void onStart(ConnectedNode connectedNode) {
      final Log log = connectedNode.getLog();
-     final KitchenDomain kitchen = new KitchenDomain();
+     final BaxterKitchen kitchen = new BaxterKitchen();
+     this.policies = kitchen.generatePolicies(kitchen.generateDomain(new Brownies()), new Brownies());
      this.messageFactory = connectedNode.getTopicMessageFactory();
      //kitchen.setDebug(true);
      this.setInitializedFalse();
      this.actionPublisher = connectedNode.newPublisher("/baxter_action", BaxterAction._TYPE);
      Subscriber<RecognizedObjectArray> subscriber = connectedNode.newSubscriber("/ar_objects", RecognizedObjectArray._TYPE);
      this.previouslySeenObjects = new ArrayList<String>();
-     
+     this.currentState = kitchen.generateInitialState(kitchen.generateDomain(new Brownies()), new Brownies());
 
     subscriber.addMessageListener(new MessageListener<RecognizedObjectArray>() {
       @Override
@@ -109,21 +109,23 @@ public class RobotActionPlanner extends AbstractNodeMain {
           double z = obj.getPose().getPose().getPose().getPosition().getZ();
           // add object
           System.out.println("Adding object " + name);
-          kitchen.addObject(name, x, y, z);
+          kitchen.addObjectInRobotsSpace(RobotActionPlanner.this.currentState, name);
           currentObjects.add(name);
          }
-       State state = kitchen.getCurrentState();
-
+       
        RobotActionPlanner.this.previouslySeenObjects.removeAll(currentObjects);
        for (String name : previouslySeenObjects) {
-    	   kitchen.disposeObject(state, name);
+    	   RobotActionPlanner.this.currentState = kitchen.disposeObject(RobotActionPlanner.this.currentState, name);
        }
-       RobotActionPlanner.this.currentState = state;
-       
+       RobotActionPlanner.this.previouslySeenObjects.clear();
+       RobotActionPlanner.this.previouslySeenObjects.addAll(currentObjects);
 
-       String[] actionParams = kitchen.getRobotActionParams();
-       BaxterAction actionMsg = RobotActionPlanner.this.getRobotActionMsg(actionParams);
-       RobotActionPlanner.this.actionPublisher.publish(actionMsg);
+       String[] actionParams = kitchen.getRobotAction(RobotActionPlanner.this.currentState, RobotActionPlanner.this.policies);
+       if (actionParams != null) {
+    	   BaxterAction actionMsg = RobotActionPlanner.this.getRobotActionMsg(actionParams);
+    	   RobotActionPlanner.this.actionPublisher.publish(actionMsg);
+    	   System.out.println(RobotActionPlanner.this.currentState.toString());
+       }
      }
 
     });
