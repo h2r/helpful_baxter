@@ -8,6 +8,7 @@
 	<arg name="qz" default="0" />
 	<arg name="qw" default="1.0" />
 	<arg name="launch_kinect" default="true" />
+	<arg name="marker_size" default="3.8" />
 
 	<group if="$(arg launch_kinect)">
 		<include file="$(find openni_launch)/launch/openni.launch">
@@ -27,13 +28,16 @@
 
     <include file="$(find baxter_moveit_config)/launch/run.launch"/>
 
-    <include file="$(find baxter_kinect_calibration)/launch/baxter_indiv.launch">
+    
+    <include file="$(find baxter_kinect_calibration)/launch/baxter_bundle.launch">
     	<arg name="launch_kinect" value="false"/>
+    	<arg name="marker_size" value="$(arg marker_size)" />
     </include>
 
     <node name="object_identifier" pkg="object_identifier" type="object_identifier.py" />
 
-    <node name="table_publisher" pkg="object_identifier" type="table_publisher.py" />
+    <!--
+    <node name="table_publisher" pkg="object_identifier" type="table_publisher.py" />-->
 
     <node name="table_detector" pkg="object_recognition_core" type="detection" 
     	args="-c $(find object_recognition_tabletop)/conf/detection.table.ros.ork2" />
